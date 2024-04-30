@@ -6,10 +6,10 @@ import numpy as np
 app = Flask(__name__)
 
 # Load the kNN model and scaler
-with open('C:\\Users\\aallv\\Documents\\Project TA\\Model-Model-Model\\knn_model.pkl', 'rb') as model_file:
+with open('knn_model.pkl', 'rb') as model_file:
     knn = pickle.load(model_file)
 
-with open('C:\\Users\\aallv\\Documents\\Project TA\\Model-Model-Model\\scaler.pkl', 'rb') as scaler_file:
+with open('scaler.pkl', 'rb') as scaler_file:
     scaler = pickle.load(scaler_file)
     
 # Fungsi untuk menghitung berat badan ideal
@@ -167,7 +167,7 @@ def rekomendasi():
     penyakit_input = data['penyakit'].split(',')
     alergi = data['alergi'].split(',')
     
-    dataset = pd.read_csv("C:\\Users\\aallv\\Documents\\Project TA\\Model-Model-Model\\CombinedResep.csv")
+    dataset = pd.read_csv("CombinedResep.csv")
     
     meal_factors = {1: 0.25, 2: 0.40, 3: 0.35}
     results = {}
