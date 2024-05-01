@@ -195,12 +195,56 @@ def rekomendasi():
         for idx in indices[0]:
             recommended_food = meal_dataset.iloc[idx]
             if not any(allergen in recommended_food['Ingredients'] for allergen in alergi):
-                recommendations.append(recommended_food[['Recipe ID', 'Energi (kkal)', 'Karbohidrat (g)', 'Lemak (g)', 'Protein (g)']].to_dict())
+                recommendations.append(recommended_food[['Recipe ID']].to_dict())
         
         results[mealtime] = recommendations
     
     return jsonify(results)
+    
+@app.route('/rekomendasi-get', methods=['GET'])  # New GET endpoint
+def rekomendasi_get():
+    try:
+        Tb = int(request.args.get('tinggi_badan'))
+        jenis_kelamin = request.args.get('jenis_kelamin')
+        umur = int(request.args.get('umur'))
+        penyakit_input = request.args.get('penyakit').split(',')
+        alergi = request.args.get('alergi').split(',')
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
+    dataset = pd.read_csv("path_to_CombinedResep.csv")
+    
+    meal_factors = {1: 0.25, 2: 0.40, 3: 0.35}
+    results = {}
+    
+    berat_badan_ideal = hitung_berat_badan_ideal(Tb)
+    AKEi = hitung_AKEi_umur(berat_badan_ideal, jenis_kelamin, umur)
+    
+    mealtime_map = {1: 'sarapan', 2: 'makan siang', 3: 'makan malam'}
+    
+    for meal_id, factor in meal_factors.items():
+        meal_dataset = dataset[dataset['Meal ID'] == meal_id]
+        if meal_dataset.empty:
+            continue
+        
+        features = meal_dataset[['Energi (kkal)', 'Protein (g)', 'Lemak (g)', 'Lemak Jenuh (g)', 'Lemak tak Jenuh Ganda (g)', 'Lemak tak Jenuh Tunggal (g)', 'Karbohidrat (g)', 'Kolesterol (mg)', 'Gula (g)', 'Serat (g)', 'Sodium (mg)', 'Kalium (mg)']]
+        features_scaled = scaler.transform(features)
+        
+        mealtime = mealtime_map[meal_id]
+        target = hitung_kebutuhan_nutrisi(mealtime, AKEi * factor, penyakit_input, jenis_kelamin, alergi)
+        target_scaled = scaler.transform(target.reshape(1, -1))
+        
+        distances, indices = knn.kneighbors(target_scaled, return_distance=True)
+        
+        recommendations = []
+        for idx in indices[0]:
+            recommended_food = meal_dataset.iloc[idx]
+            if not any(allergen in recommended_food['Ingredients'] for allergen in alergi):
+                recommendations.append(recommended_food[['Recipe ID']].to_dict())
+        
+        results[mealtime] = recommendations
+    
+    return jsonify(results)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8050)
