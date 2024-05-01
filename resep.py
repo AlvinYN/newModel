@@ -195,7 +195,7 @@ def rekomendasi():
         for idx in indices[0]:
             recommended_food = meal_dataset.iloc[idx]
             if not any(allergen in recommended_food['Ingredients'] for allergen in alergi):
-                recommendations.append(recommended_food[['Nama Resep', 'Energi (kkal)', 'Karbohidrat (g)', 'Lemak (g)', 'Protein (g)']].to_dict())
+                recommendations.append(recommended_food[['Recipe ID', 'Energi (kkal)', 'Karbohidrat (g)', 'Lemak (g)', 'Protein (g)']].to_dict())
         
         results[mealtime] = recommendations
     
