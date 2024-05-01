@@ -212,7 +212,7 @@ def rekomendasi_get():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-    dataset = pd.read_csv("path_to_CombinedResep.csv")
+    dataset = pd.read_csv("CombinedResep.csv")
     
     meal_factors = {1: 0.25, 2: 0.40, 3: 0.35}
     results = {}
