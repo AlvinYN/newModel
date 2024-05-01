@@ -19,11 +19,11 @@ def hitung_berat_badan_ideal(Tb):
 # Fungsi untuk menghitung kebutuhan kalori dasar
 def hitung_AKEi_umur(Bi, jenis_kelamin, umur):
     if 20 <= umur <= 29:
-        AKEi = (15.3 * Bi + 679) * 1.78 if jenis_kelamin.lower() == 'pria' else (14.7 * Bi + 496) * 1.64
+        AKEi = (15.3 * Bi + 679) * 1.78 if jenis_kelamin.lower() == 'Laki-laki' else (14.7 * Bi + 496) * 1.64
     elif 30 <= umur <= 59:
-        AKEi = (11.6 * Bi + 879) * 1.78 if jenis_kelamin.lower() == 'pria' else (8.7 * Bi + 829) * 1.64
+        AKEi = (11.6 * Bi + 879) * 1.78 if jenis_kelamin.lower() == 'Laki-laki' else (8.7 * Bi + 829) * 1.64
     elif umur >= 60:
-        AKEi = (13.5 * Bi + 487) * 1.78 if jenis_kelamin.lower() == 'pria' else (13.5 * Bi + 596) * 1.64
+        AKEi = (13.5 * Bi + 487) * 1.78 if jenis_kelamin.lower() == 'Laki-laki' else (13.5 * Bi + 596) * 1.64
     return AKEi
 
 # Fungsi untuk menghitung faktor kebutuhan nutrisi berdasarkan mealtime
@@ -143,9 +143,9 @@ def hitung_kebutuhan_nutrisi(mealtime, AKEi, penyakit_input_list, jenis_kelamin,
         lemak_tidak_jenuh_tunggal = lemak - lemak_jenuh - lemak_tidak_jenuh_ganda
         kolesterol = 200
         gula = 0.025 * AKEi
-        if jenis_kelamin == 'pria':
+        if jenis_kelamin == 'Laki-laki':
             serat = 38
-        elif jenis_kelamin.lower() == 'wanita':
+        elif jenis_kelamin.lower() == 'Perempuan':
             serat = 25
         else:
            raise ValueError("Jenis kelamin tidak valid") 
