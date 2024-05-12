@@ -58,7 +58,6 @@ def recommend():
             recommended_food = meal_dataset.iloc[idx]
             if not any(allergen in recommended_food['Ingredients'] for allergen in alergi):
                 food_details = {'Recipe ID': int(recommended_food['Recipe ID'])}
-                food_details['distance'] = distance
                 food_list.append(food_details)
 
         recommendations[mealtime] = food_list
